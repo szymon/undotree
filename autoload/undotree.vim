@@ -1170,6 +1170,7 @@ function! s:diffpanel.ParseDiff(diffresult, targetBufnr) abort
     let w:undotree_diffsigns = 0
     let lineNr = 0
     let l:lastLine = line('$')
+    let matchwhat = ''
     for line in a:diffresult
         let matchnum = matchstr(line,'^[0-9,\,]*[acd]\zs\d*\ze')
         if !empty(matchnum)
@@ -1202,7 +1203,7 @@ function! s:diffpanel.ParseDiff(diffresult, targetBufnr) abort
 
         let self.changes.add += 1
         if g:undotree_HighlightChangedText
-            if matchtext != ' '
+            if matchtext != ' ' && matchwhat != ''
                 let matchtext = '\%'.lineNr.'l\V'.escape(matchtext[1:],'"\') "remove beginning space.
                 call s:log("matchadd(".matchwhat.") ->  ".matchtext)
                 call add(w:undotree_diffmatches,matchadd((matchwhat ==# 'a' ? g:undotree_HighlightSyntaxAdd : g:undotree_HighlightSyntaxChange),matchtext))
